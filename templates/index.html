@@ -1,0 +1,58 @@
+<html>
+<head>
+<title>Go: Anagrams</title>
+<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css">
+</head>
+<body>
+<header class="container bg-primary text-white">
+	<br/><h1 class="text-center">Go: Anagrams</h1><br/>
+</header>
+
+<br/>
+<p class="text-center">In this game you are given a word with mixed letters, anagram.<br/>
+Your goal: to guess the word, conceived in the game (to solve anagram)</p>
+
+{{if .IsSucess}}
+<br/>
+<br/>
+
+<div class="well container">
+	<form action="/" method="get" class="form-group">
+		<div class="input-group-lg">
+			<input type="submit" class="form-control btn btn-success" value="Retry"/>  
+		</div>
+	<form>
+</div>
+{{else}}
+
+<h2 class="text-center" >{{.Word}}</h2>
+<br/>
+
+<div class="well container">
+	<form action="/" method="post" class="form-group">
+		<div class="input-group input-group-lg">
+			<input name="answer" class="form-control" placeholder="Answer"/>
+			<span class="input-group-btn">
+				<input type="submit" class="btn btn-success" value="Check"/>
+			</span>	  
+		</div>
+	<form>
+</div>
+{{end}}	
+
+{{if .IsSucess}}
+<div class="container alert alert-success" role="alert">
+  <strong>Well done!</strong> You successfully read this important alert message.
+</div>
+{{else if .IsError}}
+<div class="container alert alert-danger" role="alert">
+  <strong>Oh snap!</strong> Change a few things up and try submitting again.
+</div>
+{{else}} <br/><br/><br/> {{end}}	
+<br/>
+
+<footer class="container text-muted">
+	<h5 class="text-center">(c) Daria Pydorenko, 2017</h5>
+</footer>
+</body>
+</html>
