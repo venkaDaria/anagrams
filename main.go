@@ -62,16 +62,18 @@ func main() {
 	
 	rand.Seed(time.Now().UTC().UnixNano())
 	anagram.Words = strings.Split(string(content), "\n")
-	fmt.Println(getPort())
+	
     	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("css"))))
     	http.HandleFunc("/", indexHandler)
-    
+
     	http.ListenAndServe(getPort(), nil)
 }
 
 // Get the Port from the environment so we can run on Heroku
 func getPort() string {
 	var port = os.Getenv("PORT")
+	fmt.Println(port)
+
 	// Set a default port if there is nothing in the environment
 	if port == "" {
 		port = "8080"
