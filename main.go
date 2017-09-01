@@ -1,6 +1,7 @@
 package main
 
 import (
+	"os"
 	io "io/ioutil"
 	"fmt"
 	"time"
@@ -21,8 +22,8 @@ type page struct {
 	IsCreated bool	 
 }
 
-func indexHandler(w http.ResponseWriter, r* http.Request) {
-    t, err := template.ParseFiles("templates/index.html")
+func indexHandler(w http.ResponseWriter, r* http.Request) {	
+	t, err := template.ParseFiles("templates/index.html")
 	if err != nil {
 		fmt.Fprintf(w, err.Error())
 	}
@@ -42,7 +43,7 @@ func indexHandler(w http.ResponseWriter, r* http.Request) {
 		}	
 	}
 	
-    template_error := t.Execute(w, &page{ Word: Word, 
+    	template_error := t.Execute(w, &page{ Word: Word, 
 		IsSucess: isSucess, IsError: isError })
 	
 	if template_error != nil {
@@ -62,7 +63,13 @@ func main() {
 	rand.Seed(time.Now().UTC().UnixNano())
 	anagram.Words = strings.Split(string(content), "\n")
 	
-    http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("css"))))
-	http.HandleFunc("/", indexHandler)
-    http.ListenAndServe(":8080", nil)
+    	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("css"))))
+    	http.HandleFunc("/", indexHandler)
+    
+	port := os.Getenv("PORT")
+    	if port == "" {
+       		port = "8080"
+    	}
+
+    	http.ListenAndServe(":" + port, nil)
 }
