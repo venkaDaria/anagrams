@@ -11,39 +11,39 @@ var Words []string
 var Word string
 
 func MakeAnagram() string {
-    Word := Words[rand.Intn(len(Words))]
-    anagram := Word
-    for anagram == Word {
-        anagram = anagrams(Word)
+    	Word := Words[rand.Intn(len(Words))]
+    	anagram := Word
+    	for anagram == Word {
+        	anagram = anagrams(Word)
 	}
-	fmt.Println(Word)
-    return anagram
+	fmt.Println(Word)	
+	return anagram
 }
 
 func anagrams(w string) string {
-    anagram := ""
+    	anagram := ""
 	word := strings.Split(w, "")
-	for len(word) > 1 {
-		i := rand.Intn(len(word) - 1)
-        el := word[i]
-        word = append(word[:i], word[i+1:]...)
-        anagram += el
+	for len(word) > 0 {
+		i := rand.Intn(len(word))
+        	el := word[i]
+        	word = append(word[:i], word[i+1:]...)	
+		anagram += el
 	}
-    return anagram
+    	return anagram
 }
 
 func in_array(val string, array []string) (ok bool, i int) {
-    for i = range array {
+    	for i = range array {
 		word := array[i][:len(array[i]) -1]
-        if ok = word == val; ok {
-            return
-        }
-    }
-    return
+        	if ok = word == val; ok {
+            		return
+        	}
+    	}
+    	return
 }
 
 func Check(anagram string, answer string) bool {
-    ok, _ := in_array(answer, Words) 
+    	ok, _ := in_array(answer, Words) 
 	return ok && isAnagram(anagram, answer)
 }
 
