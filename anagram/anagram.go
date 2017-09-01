@@ -34,8 +34,7 @@ func anagrams(w string) string {
 
 func in_array(val string, array []string) (ok bool, i int) {
     	for i = range array {
-		word := array[i][:len(array[i]) -1]
-        	if ok = word == val; ok {
+        	if ok = array[i] == val; ok {
             		return
         	}
     	}
