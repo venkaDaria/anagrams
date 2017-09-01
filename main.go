@@ -66,10 +66,16 @@ func main() {
     	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("css"))))
     	http.HandleFunc("/", indexHandler)
     
-	port := os.Getenv("PORT")
-    	if port == "" {
-       		port = "8080"
-    	}
+    	http.ListenAndServe(getPort(), nil)
+}
 
-    	http.ListenAndServe(":" + port, nil)
+// Get the Port from the environment so we can run on Heroku
+func getPort() string {
+	var port = os.Getenv("PORT")
+	// Set a default port if there is nothing in the environment
+	if port == "" {
+		port = "8080"
+		fmt.Println("INFO: No PORT environment variable detected, defaulting to " + port)
+	}
+	return ":" + port
 }
