@@ -23,7 +23,7 @@ func MakeAnagram() string {
 func anagrams(w string) string {
     	anagram := ""
 	word := strings.Split(w, "")
-	for len(word) > 1 {
+	for len(word) > 0 {
 		i := rand.Intn(len(word))
         	el := word[i]
         	word = append(word[:i], word[i+1:]...)	
