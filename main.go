@@ -4,11 +4,11 @@ import (
 	io "io/ioutil"
 	"fmt"
 	"time"
-    "html/template"
-    "net/http"
+    	"html/template"
+    	"net/http"
 	"strings"
 	"math/rand"
-	anagram "./anagram"
+	anagram "anagrams/anagram"
 )
 
 var Word string
