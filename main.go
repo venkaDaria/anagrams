@@ -13,13 +13,12 @@ import (
 )
 
 var Word string
-var IsSecond bool
+var count int
 
 type page struct {
 	Word string	
 	IsSucess bool
 	IsError bool
-	IsCreated bool	 
 }
 
 func indexHandler(w http.ResponseWriter, r* http.Request) {	
@@ -31,7 +30,7 @@ func indexHandler(w http.ResponseWriter, r* http.Request) {
 	isSucess := false
 	isError := false
 	
-	if !IsSecond {
+	if count == 0 {
 		switch r.Method {
 		case "GET":
 			Word = strings.ToUpper(anagram.MakeAnagram())
@@ -50,7 +49,10 @@ func indexHandler(w http.ResponseWriter, r* http.Request) {
 		fmt.Fprintf(w, template_error.Error())
 	}
 	
-	IsSecond = !IsSecond
+	count++
+	if count == 3 {
+		count = 0
+	}
 }
 
 func main() {
