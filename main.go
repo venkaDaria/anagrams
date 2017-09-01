@@ -13,7 +13,6 @@ import (
 )
 
 var Word string
-var count int
 
 type page struct {
 	Word string	
@@ -30,7 +29,7 @@ func indexHandler(w http.ResponseWriter, r* http.Request) {
 	isSucess := false
 	isError := false
 	
-	if count == 0 {
+	if r.URL.Path == "/" {
 		switch r.Method {
 		case "GET":
 			Word = strings.ToUpper(anagram.MakeAnagram())
@@ -47,11 +46,6 @@ func indexHandler(w http.ResponseWriter, r* http.Request) {
 	
 	if template_error != nil {
 		fmt.Fprintf(w, template_error.Error())
-	}
-	
-	count++
-	if count == 3 {
-		count = 0
 	}
 }
 
