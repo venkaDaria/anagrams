@@ -1,15 +1,12 @@
 {
-	
 	"ImportPath": "anagrams",
-	
 	"GoVersion": "go1.8",
-	
 	"GodepVersion": "v79",
-	
 	"Deps": [
-	{
-		"ImportPath": "github.com/icza/session"
-	}
+		{
+			"ImportPath": "github.com/icza/session",
+			"Comment": "v1.1.0-1-g18040e1",
+			"Rev": "18040e14e0486c9cc8c96cd4af691ef1f1fe7915"
+		}
 	]
-
 }
