@@ -30,22 +30,24 @@ func indexHandler(w http.ResponseWriter, r* http.Request) {
 
 	sess := session.Get(r)
 	if sess == nil {
-    		panic(fmt.Println("can't get session"))
+    		sess = session.NewSessionOptions(&session.SessOptions{
+    			Attrs:  map[string]interface{}{"Word": nil},
+		})
 	} 
 	
 	if r.URL.Path == "/" {
 		switch r.Method {
-		case "GET":
-			sess["word"] = strings.ToUpper(anagram.MakeAnagram())
+		case "GET": 
+			sess.SetAttr("Word", strings.ToUpper(anagram.MakeAnagram()))
 		case "POST":
-			isSucess = anagram.Check(sess["word"], r.PostFormValue("answer"))
+			isSucess = anagram.Check(sess.Attr("Word"), r.PostFormValue("answer"))
 			isError = !isSucess	
 		default:
 			fmt.Fprintf(w, "default when switch method")
 		}	
 	}
 	
-    	template_error := t.Execute(w, &page{ Word: sess["word"], IsSucess: isSucess, 
+    	template_error := t.Execute(w, &page{ Word: sess.Attr("Word"), IsSucess: isSucess, 
 		IsError: isError })
 	
 	if template_error != nil {
