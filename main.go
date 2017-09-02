@@ -29,7 +29,7 @@ func indexHandler(w http.ResponseWriter, r* http.Request) {
 	isError := false
 
 	if r.URL.Path == "/" {
-		sess := getSession()
+		sess := getSession(r)
 
 		switch r.Method {
 		case "GET": 
