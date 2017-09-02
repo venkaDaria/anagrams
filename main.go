@@ -10,9 +10,8 @@ import (
 	"strings"
 	"math/rand"
 	anagram "anagrams/anagram"
+	session "github.com/icza/session"
 )
-
-var Word string
 
 type page struct {
 	Word string	
@@ -28,21 +27,26 @@ func indexHandler(w http.ResponseWriter, r* http.Request) {
 	
 	isSucess := false
 	isError := false
+
+	sess := session.Get(r)
+	if sess == nil {
+    		panic(fmt.Println("can't get session"))
+	} 
 	
 	if r.URL.Path == "/" {
 		switch r.Method {
 		case "GET":
-			Word = strings.ToUpper(anagram.MakeAnagram())
+			sess["word"] = strings.ToUpper(anagram.MakeAnagram())
 		case "POST":
-			isSucess = anagram.Check(Word, r.PostFormValue("answer"))
+			isSucess = anagram.Check(sess["word"], r.PostFormValue("answer"))
 			isError = !isSucess	
 		default:
 			fmt.Fprintf(w, "default when switch method")
 		}	
 	}
 	
-    	template_error := t.Execute(w, &page{ Word: Word, 
-		IsSucess: isSucess, IsError: isError })
+    	template_error := t.Execute(w, &page{ Word: sess["word"], IsSucess: isSucess, 
+		IsError: isError })
 	
 	if template_error != nil {
 		fmt.Fprintf(w, template_error.Error())
