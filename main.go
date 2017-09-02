@@ -40,14 +40,14 @@ func indexHandler(w http.ResponseWriter, r* http.Request) {
 		case "GET": 
 			sess.SetAttr("Word", strings.ToUpper(anagram.MakeAnagram()))
 		case "POST":
-			isSucess = anagram.Check(sess.Attr("Word"), r.PostFormValue("answer"))
+			isSucess = anagram.Check(sess.Attr("Word").(string), r.PostFormValue("answer"))
 			isError = !isSucess	
 		default:
 			fmt.Fprintf(w, "default when switch method")
 		}	
 	}
 	
-    	template_error := t.Execute(w, &page{ Word: sess.Attr("Word"), IsSucess: isSucess, 
+    	template_error := t.Execute(w, &page{ Word: sess.Attr("Word").(string), IsSucess: isSucess, 
 		IsError: isError })
 	
 	if template_error != nil {
