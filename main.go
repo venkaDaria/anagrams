@@ -32,7 +32,7 @@ func indexHandler(w http.ResponseWriter, r* http.Request) {
 	isSucess := false
 	isError := false
 	
-	sess := getSession(r)
+	sess := getSession(w, r)
 
 	switch r.Method {
 	case "GET": 
@@ -81,12 +81,14 @@ func getPort() string {
 	return ":" + port
 }
 
-func getSession(r* http.Request) session.Session {
+func getSession(w http.ResponseWriter, r* http.Request) session.Session {
 	sess := session.Get(r)
+
 	if sess == nil {
     		sess = session.NewSessionOptions(&session.SessOptions{
     			Attrs:  map[string]interface{}{"Word": ""},
 		})
+		session.Add(sess, w)
 	} 
 	return sess
 }
