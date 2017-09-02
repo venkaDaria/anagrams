@@ -20,28 +20,30 @@ type page struct {
 }
 
 func indexHandler(w http.ResponseWriter, r* http.Request) {	
+	if r.URL.Path != "/" {
+		return
+	}
+
 	t, err := template.ParseFiles("templates/index.html")
 	if err != nil {
 		fmt.Fprintf(w, err.Error())
 	}
-	
+
 	isSucess := false
 	isError := false
-
-	if r.URL.Path == "/" {
-		sess := getSession(r)
-
-		switch r.Method {
-		case "GET": 
-			sess.SetAttr("Word", strings.ToUpper(anagram.MakeAnagram()))
-		case "POST":
-			isSucess = anagram.Check(sess.Attr("Word").(string), r.PostFormValue("answer"))
-			isError = !isSucess	
-		default:
-			fmt.Fprintf(w, "default when switch method")
-		}	
-	}
 	
+	sess := getSession(r)
+
+	switch r.Method {
+	case "GET": 
+		sess.SetAttr("Word", strings.ToUpper(anagram.MakeAnagram()))
+	case "POST":
+		isSucess = anagram.Check(sess.Attr("Word").(string), r.PostFormValue("answer"))
+		isError = !isSucess	
+	default:
+		fmt.Fprintf(w, "default when switch method")
+	}	
+
     	template_error := t.Execute(w, &page{ Word: sess.Attr("Word").(string), IsSucess: isSucess, 
 		IsError: isError })
 	
@@ -68,7 +70,7 @@ func main() {
 
 // Get the Port from the environment so we can run on Heroku
 func getPort() string {
-	var port = os.Getenv("PORT")
+	port := os.Getenv("PORT")
 	fmt.Println(port)
 
 	// Set a default port if there is nothing in the environment
@@ -79,7 +81,7 @@ func getPort() string {
 	return ":" + port
 }
 
-func getSession(r* http.Request) Session {
+func getSession(r* http.Request) session.Session {
 	sess := session.Get(r)
 	if sess == nil {
     		sess = session.NewSessionOptions(&session.SessOptions{
