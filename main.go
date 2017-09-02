@@ -28,14 +28,9 @@ func indexHandler(w http.ResponseWriter, r* http.Request) {
 	isSucess := false
 	isError := false
 
-	sess := session.Get(r)
-	if sess == nil {
-    		sess = session.NewSessionOptions(&session.SessOptions{
-    			Attrs:  map[string]interface{}{"Word": nil},
-		})
-	} 
-	
 	if r.URL.Path == "/" {
+		sess := getSession()
+
 		switch r.Method {
 		case "GET": 
 			sess.SetAttr("Word", strings.ToUpper(anagram.MakeAnagram()))
@@ -82,4 +77,14 @@ func getPort() string {
 		fmt.Println("INFO: No PORT environment variable detected, defaulting to " + port)
 	}
 	return ":" + port
+}
+
+func getSession(r* http.Request) Session {
+	sess := session.Get(r)
+	if sess == nil {
+    		sess = session.NewSessionOptions(&session.SessOptions{
+    			Attrs:  map[string]interface{}{"Word": ""},
+		})
+	} 
+	return sess
 }
