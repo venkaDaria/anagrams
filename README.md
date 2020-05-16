@@ -1,4 +1,4 @@
 # anagrams
 Anagrams game on Go
 
-Deployed: https://agile-brushlands-22728.herokuapp.com/
+Deployed on Heroku: https://agile-brushlands-22728.herokuapp.com/
