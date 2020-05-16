@@ -63,7 +63,7 @@ func main() {
 	}
 	
 	rand.Seed(time.Now().UTC().UnixNano())
-	anagram.Words = strings.Split(string(content), "\r\n")
+	anagram.Words = strings.Split(string(content), "\n")
 	
 	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("css"))))
 	http.HandleFunc("/", indexHandler)
