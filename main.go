@@ -5,8 +5,8 @@ import (
 	io "io/ioutil"
 	"fmt"
 	"time"
-    	"html/template"
-    	"net/http"
+	"html/template"
+	"net/http"
 	"strings"
 	"math/rand"
 	anagram "anagrams/anagram"
@@ -35,7 +35,7 @@ func indexHandler(w http.ResponseWriter, r* http.Request) {
 	sess := getSession(w, r)
 
 	switch r.Method {
-	case "GET": 
+	case "GET":
 		sess.SetAttr("Word", strings.ToUpper(anagram.MakeAnagram()))
 	case "POST":
 		isSucess = anagram.Check(sess.Attr("Word").(string), r.PostFormValue("answer"))
@@ -44,8 +44,7 @@ func indexHandler(w http.ResponseWriter, r* http.Request) {
 		fmt.Fprintf(w, "default when switch method")
 	}	
 
-    	template_error := t.Execute(w, &page{ Word: sess.Attr("Word").(string), IsSucess: isSucess, 
-		IsError: isError })
+	template_error := t.Execute(w, &page{ Word: sess.Attr("Word").(string), IsSucess: isSucess, IsError: isError })
 	
 	if template_error != nil {
 		fmt.Fprintf(w, template_error.Error())
@@ -53,6 +52,10 @@ func indexHandler(w http.ResponseWriter, r* http.Request) {
 }
 
 func main() {
+	// For testing purposes, we want cookies to be sent over HTTP too (not just HTTPS):
+	session.Global.Close()
+	session.Global = session.NewCookieManagerOptions(session.NewInMemStore(), &session.CookieMngrOptions{AllowHTTP: true})
+
 	content, err := io.ReadFile("dict.txt")
 	
 	if err != nil {
@@ -60,12 +63,12 @@ func main() {
 	}
 	
 	rand.Seed(time.Now().UTC().UnixNano())
-	anagram.Words = strings.Split(string(content), "\n")
+	anagram.Words = strings.Split(string(content), "\r\n")
 	
-    	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("css"))))
-    	http.HandleFunc("/", indexHandler)
+	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("css"))))
+	http.HandleFunc("/", indexHandler)
 
-    	http.ListenAndServe(getPort(), nil)
+	http.ListenAndServe(getPort(), nil)
 }
 
 // Get the Port from the environment so we can run on Heroku
@@ -85,8 +88,8 @@ func getSession(w http.ResponseWriter, r* http.Request) session.Session {
 	sess := session.Get(r)
 
 	if sess == nil {
-    		sess = session.NewSessionOptions(&session.SessOptions{
-    			Attrs:  map[string]interface{}{"Word": ""},
+		sess = session.NewSessionOptions(&session.SessOptions{
+			Attrs: map[string]interface{}{"Word": ""},
 		})
 		session.Add(sess, w)
 	} 
